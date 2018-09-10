@@ -20,7 +20,7 @@ def train(port):
     agent=DDPG(config)
     # agent.load(load('savedir/weight_0.0.npy').item())
 
-    params=[0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
+    params=[0.1303, 0.2576, 0.4564]
     env.launch()
 
     for param in params:
@@ -33,7 +33,7 @@ def train(port):
             env.start()
             state,done=env.step([0,0])
             for step in range(config.max_step):
-                epsilon=0.99997**env.epoch
+                epsilon=0.99998**env.epoch
                 action=agent.policy(reshape(state,[1,config.state_dim]),epsilon=epsilon)
                 state,done=env.step(reshape(action,[config.action_dim]))
                 if env.replay.buffersize>200:
@@ -78,5 +78,5 @@ def test(port):
         save('recorded_traj2.npy',trajs)
 
 if __name__=='__main__':
-    #train(20000)
-    test(20000)
+    train(20000)
+    #test(20000)
