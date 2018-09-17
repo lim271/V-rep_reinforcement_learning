@@ -54,7 +54,8 @@ def test(port):
     config.api_port=port
     env=Turtlebot3_obstacles(config,port)
     agent=DDPG(config)
-    params=[0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
+    #params=[0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
+    params=[0.1303, 0.2576, 0.4564]
     trajs={str(param):[] for param in params}
 
     env.launch()
@@ -75,8 +76,8 @@ def test(port):
         if step>=config.max_step-1:
             print(' | Timeout')
         trajs[str(param)]=traj
-        save('recorded_traj2.npy',trajs)
+        save('recovered_traj.npy',trajs)
 
 if __name__=='__main__':
-    train(20000)
-    #test(20000)
+    #train(20000)
+    test(20000)
