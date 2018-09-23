@@ -20,8 +20,8 @@ class Turtlebot3_obstacles(Core):
             os.path.join(scene_dir,'turtlebot3.ttt'))
         self.d=0.079
         self.r=0.033
-        self.goal_set=[[3.5,3.3],[3.5,3.3]]
-        #self.goal_set=[[3.5,3.3],[3.5,3.3],[3.5,3.3],[2.0,1.8],[3.5,0.0],[1.0,3.3]]
+        #self.goal_set=[[3.5,3.3],[3.5,3.3]]
+        self.goal_set=[[3.5,3.3],[3.5,3.3],[3.5,3.3],[2.0,1.8],[3.5,0.0],[2.0,3.3]]
         self.reward_param=config.reward_param
         self.action_prev=[0.0,0.0]
         self.state0=None

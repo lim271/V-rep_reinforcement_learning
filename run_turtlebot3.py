@@ -20,7 +20,8 @@ def train(port):
     agent=DDPG(config)
     # agent.load(load('savedir/weight_0.0.npy').item())
 
-    params=[0.1303, 0.2576, 0.4564]
+    #params=[0.1303, 0.2576, 0.4564]
+    params=[0.0973,0.1315,0.1305,0.2559,0.3058,0.4629]
     env.launch()
 
     for param in params:
@@ -55,7 +56,8 @@ def test(port):
     env=Turtlebot3_obstacles(config,port)
     agent=DDPG(config)
     #params=[0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6]
-    params=[0.1303, 0.2576, 0.4564]
+    #params=[0.1303, 0.2576, 0.4564]
+    params=[0.0973,0.1315,0.1305,0.2559,0.3058,0.4629]
     trajs={str(param):[] for param in params}
 
     env.launch()
@@ -79,5 +81,5 @@ def test(port):
         save('recovered_traj.npy',trajs)
 
 if __name__=='__main__':
-    #train(20000)
-    test(20000)
+	train(20000)
+    #test(20000)
