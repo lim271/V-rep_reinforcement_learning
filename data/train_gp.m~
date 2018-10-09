@@ -1,8 +1,0 @@
-loghyper0=[0;0;0;0;log(0.1)];
-covfunc={'covSum',{'covSEard','covNoise'}};
-
-loghyper=minimize(loghyper0,'gpr',-100,covfunc,X,y)
-
-[mu,S2]=gpr(loghyper,covfunc,X,y,X);
-
-plot(y,X,y,)

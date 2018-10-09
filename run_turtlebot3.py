@@ -21,7 +21,8 @@ def train(port):
     # agent.load(load('savedir/weight_0.0.npy').item())
 
     #params=[0.1303, 0.2576, 0.4564]
-    params=[0.0973,0.1315,0.1305,0.2559,0.3058,0.4629]
+    #params=[0.0973,0.1315,0.1305,0.2559,0.3058,0.4629]
+    params=[0.4629]
     env.launch()
 
     for param in params:
@@ -78,8 +79,8 @@ def test(port):
         if step>=config.max_step-1:
             print(' | Timeout')
         trajs[str(param)]=traj
-        save('recovered_traj.npy',trajs)
+        save('recovered_traj2.npy',trajs)
 
 if __name__=='__main__':
-	train(20000)
-    #test(20000)
+	#train(20000)
+    test(20000)
