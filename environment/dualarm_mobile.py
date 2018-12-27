@@ -38,8 +38,8 @@ class Dualarm_mobile(Core):
                 for name in [
                     'rollingJoint_fl',
                     'rollingJoint_rl',
-                    'rollingJoint_rr',
-                    'rollingJoint_fr'
+                    'rollingJoint_fr',
+                    'rollingJoint_rr'
                 ]
         ]
         self.body_handle = vrep.simxGetObjectHandle(
