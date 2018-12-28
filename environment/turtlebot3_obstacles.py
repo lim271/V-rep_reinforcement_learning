@@ -41,7 +41,7 @@ class Turtlebot3_obstacles(Core):
         ]
         self.body_handle = vrep.simxGetObjectHandle(
             self.clientID,
-            'Turtlebot3',
+            'Turtlebot3_base',
             vrep.simx_opmode_blocking
         )[1]
         self.goal_handle = vrep.simxGetObjectHandle(
@@ -78,7 +78,7 @@ class Turtlebot3_obstacles(Core):
         while vrep.simxGetLastCmdTime(self.clientID)-t<self.dt:
             lrf_bin = vrep.simxGetStringSignal(
                 self.clientID,
-                'hokuyo_data',
+                'measurement',
                 vrep.simx_opmode_streaming
             )[1]
             pose = vrep.simxGetObjectPosition(
