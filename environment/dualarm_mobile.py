@@ -34,8 +34,8 @@ class Dualarm_mobile(Core):
         vrep.simxSynchronousTrigger(self.clientID)
         self.joint_handles = [
             vrep.simxGetObjectHandle(
-                self.clientID, name, vrep.simx_opmode_blocking)[1] \
-                for name in [
+                self.clientID, name, vrep.simx_opmode_blocking
+            )[1] for name in [
                     'rollingJoint_fl',
                     'rollingJoint_rl',
                     'rollingJoint_fr',

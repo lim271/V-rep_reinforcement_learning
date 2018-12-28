@@ -24,19 +24,19 @@ class Core(object):
     def vrep_launch(self):
         if self.autolaunch:
             if self.viz:
-                vrep_exec=self.vrep_path+'/vrep.sh '
+                vrep_exec = self.vrep_path+'/vrep.sh '
                 t_val = 5.0
             else:
-                vrep_exec=self.vrep_path+'/vrep.sh -h '
+                vrep_exec = self.vrep_path+'/vrep.sh -h '
                 t_val = 1.0
-            synch_mode_cmd= 
+            synch_mode_cmd = 
                 '-gREMOTEAPISERVERSERVICE_'+str(self.port)+'_FALSE_TRUE '
             subprocess.call(
                 vrep_exec+synch_mode_cmd+self.scene+' &',
                 shell=True
             )
             time.sleep(t_val)      
-        self.clientID=vrep.simxStart(
+        self.clientID = vrep.simxStart(
             '127.0.0.1',
             self.port,
             True,
@@ -55,7 +55,8 @@ class Core(object):
     
     def pause(self):
         vrep.simxPauseSimulation(
-            self.clientID,vrep.simx_opmode_oneshot)
+            self.clientID,vrep.simx_opmode_oneshot
+        )
     
     def close(self):
         self.vrep_reset()
