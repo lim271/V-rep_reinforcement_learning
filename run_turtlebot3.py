@@ -20,9 +20,9 @@ def train(port):
     agent = DDPG(config)
     # agent.load(load('savedir/weight_0.0.npy').item())
 
-    #params = [0.1303,  0.2576,  0.4564]
-    #params = [0.0973, 0.1315, 0.1305, 0.2559, 0.3058, 0.4629]
-    params = [0.4629]
+    # params = [0.1303,  0.2576,  0.4564]
+    # params = [0.0973, 0.1315, 0.1305, 0.2559, 0.3058, 0.4629]
+    params = [0.4564]
     env.launch()
 
     for param in params:
@@ -32,13 +32,12 @@ def train(port):
         for episode in range(config.max_episode):
             env.reset()
             print('Rho:', param, '\tEpisode:', episode+1)
-            env.start()
-            state, done = env.step([0, 0])
+            state, done = env.start()
             for step in range(config.max_step):
-                epsilon = 0.99998**env.epoch
+                epsilon = 0.3*(0.99998**env.epoch)
                 action = agent.policy(reshape(state, [1, config.state_dim]), epsilon=epsilon)
                 state, done = env.step(reshape(action, [config.action_dim]))
-                if env.replay.buffersize > 200:
+                if env.replay.buffersize > 256:
                     batch = env.replay.batch()            
                     agent.update(batch)
                 if done == 1:
@@ -86,5 +85,5 @@ def test(port):
         save('recovered_traj2.npy', trajs)
 
 if __name__ == '__main__':
-	#train(20000)
-    test(20000)
+	train(19999)
+    # test(20000)

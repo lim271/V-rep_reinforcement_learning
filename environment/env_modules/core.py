@@ -29,7 +29,7 @@ class Core(object):
             else:
                 vrep_exec = self.vrep_path+'/vrep.sh -h '
                 t_val = 1.0
-            synch_mode_cmd = 
+            synch_mode_cmd = \
                 '-gREMOTEAPISERVERSERVICE_'+str(self.port)+'_FALSE_TRUE '
             subprocess.call(
                 vrep_exec+synch_mode_cmd+self.scene+' &',
