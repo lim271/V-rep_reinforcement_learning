@@ -11,7 +11,7 @@ class DDPG(object):
         if config.gpu:
             sess_config = tf.ConfigProto()
             # sess_config.gpu_options.allow_growth = True
-            sess_config.gpu_options.per_process_gpu_memory_fraction = 0.1
+            sess_config.gpu_options.per_process_gpu_memory_fraction = 0.2
         else:
             sess_config = None
         self.state_dim = config.state_dim
@@ -42,7 +42,10 @@ class DDPG(object):
         del_Q_a = gradient_inverter( \
             config.action_bounds, action_gradients, self.actor_net.out_)
         parameters_gradients = tf.gradients(
-            self.actor_net.out_, self.actor_net.var_list, -del_Q_a)
+            self.actor_net.out_,
+            self.actor_net.var_list,
+            -del_Q_a
+        )
         self.update_actor = tf.train.AdamOptimizer( \
             learning_rate=config.actor_learning_rate) \
             .apply_gradients(zip(parameters_gradients, self.actor_net.var_list))
@@ -73,9 +76,8 @@ class DDPG(object):
             [self.actor_net.a_scale, self.actor_net.a_mean])
 
     def policy(self, state, epsilon=1.0):
-        action = self.sess.run(self.actor_net.out_before_activation,  \
-            feed_dict={self.actor_net.state:state})
-        action = self.a_scale*tanh(action+0.4*random.randn(1, 2)*epsilon)+self.a_mean
+        action = self.sess.run(self.actor_net.out_, feed_dict={self.actor_net.state:state})
+        action = epsilon*(self.a_scale*tanh(0.5*random.uniform(-1, 1, 2))+self.a_mean)+(1-epsilon)*action
         return action
     
     def reset(self):
