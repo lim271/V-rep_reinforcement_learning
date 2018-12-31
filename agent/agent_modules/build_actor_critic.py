@@ -13,7 +13,6 @@ class Build_network(object):
             for layer in zip(config.layers[:-1], config.layers[1:]):
                 layers.append(list(layer))
             if name[0] == 'a':
-                # config.action_dim = len(config.action_bounds[0])
                 layers.append([config.layers[-1], config.action_dim])
                 self.a_scale = tf.subtract(
                     config.action_bounds[0], config.action_bounds[1])/2.0
@@ -21,19 +20,17 @@ class Build_network(object):
                     config.action_bounds[0], config.action_bounds[1])/2.0
             else:
                 layers.append([config.layers[-1], 1])
-                layers[1][0] += config.action_dim
+                layers[0][0] += config.action_dim
                 self.action = tf.placeholder(tf.float32, [None, config.action_dim])
             for idx, (in_dim, out_dim) in enumerate(layers):
                 self.create_variable(in_dim, out_dim, 'fc'+str(idx))
             self.var_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, name)
             self.variables = {var.name:var for var in self.var_list}
-            out_ = tf.nn.relu(self.layer_fc(self.state, 'fc0'))
-            out_ = tf.concat([out_, self.action], 1) if name[0] == 'c' else out_
-            out_ = self.layer_fc(out_, 'fc1')
-            for layer in range(2, len(layers)):
-                out_ = self.layer_fc(tf.nn.softplus(out_), 'fc'+str(layer))
+            out_ = tf.concat([self.state, self.action], 1) if name[0] == 'c' else self.state
+            for layer in range(len(layers)-1):
+                out_ = tf.nn.leaky_relu(self.layer_fc(out_, 'fc'+str(layer)))
+            out_ = self.layer_fc(out_, 'fc'+str(len(layers)-1))
             if name[0] == 'a':
-                self.out_before_activation = out_
                 self.out_ = tf.multiply(tf.tanh(out_), self.a_scale)+self.a_mean
             else:
                 self.out_ = out_
