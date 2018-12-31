@@ -3,7 +3,8 @@ import os
 import sys
 import time
 from numpy import array, reshape, linalg, arctan2, pi, expand_dims
-from random import choice
+from numpy import max as npmax
+from random import choice, uniform
 from env_modules import vrep
 from env_modules.core import Core
 
@@ -17,16 +18,143 @@ class Turtlebot3_obstacles(Core):
         Core.__init__(
             self,
             config,
-            os.path.join(scene_dir, 'turtlebot3.ttt')
+            os.path.join(scene_dir, 'turtlebot3_obstacles.ttt')
         )
         self.d = 0.079
         self.r = 0.033
-        self.goal_set = [[3.5, 3.3], [3.5, 3.3]]
-        #self.goal_set = [[3.5, 3.3], [3.5, 3.3], [3.5, 3.3], [2.0, 1.8], [3.5, 0.0], [2.0, 3.3]]
+        self.target_set = [
+            [ 6.0, -4.0],
+            [ 6.0, -3.0],
+            [ 6.0, -2.0],
+            [ 6.0, -1.0],
+            [ 6.0,  0.0],
+            [ 6.0,  1.0],
+            [ 6.0,  2.0],
+            [ 6.0,  3.0],
+            [ 6.0,  4.0],
+            [ 6.0,  5.0],
+            [ 6.0,  6.0],
+            [ 5.0, -4.0],
+            [ 5.0, -3.0],
+            [ 5.0, -2.0],
+            [ 5.0, -1.0],
+            [ 5.0,  0.0],
+            [ 5.0,  1.0],
+            [ 5.0,  2.0],
+            [ 5.0,  3.0],
+            [ 5.0,  4.0],
+            [ 5.0,  5.0],
+            [ 5.0,  6.0],
+            [ 4.0, -6.0],
+            [ 4.0, -5.0],
+            [ 4.0, -4.0],
+            [ 4.0, -3.0],
+            [ 4.0, -2.0],
+            [ 4.0, -1.0],
+            [ 4.0,  0.0],
+            [ 4.0,  1.0],
+            [ 4.0,  2.0],
+            [ 4.0,  4.0],
+            [ 4.0,  5.0],
+            [ 4.0,  6.0],
+            [ 3.0, -6.0],
+            [ 3.0, -5.0],
+            [ 3.0, -4.0],
+            [ 3.0, -3.0],
+            [ 3.0, -2.0],
+            [ 3.0, -1.0],
+            [ 3.0,  0.0],
+            [ 3.0,  1.0],
+            [ 3.0,  3.0],
+            [ 3.0,  4.0],
+            [ 3.0,  5.0],
+            [ 3.0,  6.0],
+            [ 2.0, -6.0],
+            [ 2.0, -5.0],
+            [ 2.0, -2.0],
+            [ 2.0, -1.0],
+            [ 2.0,  0.0],
+            [ 2.0,  1.0],
+            [ 2.0,  2.0],
+            [ 2.0,  3.0],
+            [ 2.0,  4.0],
+            [ 2.0,  5.0],
+            [ 2.0,  6.0],
+            [ 1.0, -6.0],
+            [ 1.0, -5.0],
+            [ 1.0, -2.0],
+            [ 1.0, -1.0],
+            [ 1.0,  0.0],
+            [ 1.0,  1.0],
+            [ 1.0,  5.0],
+            [ 1.0,  6.0],
+            [-6.0, -4.0],
+            [-6.0, -3.0],
+            [-6.0, -2.0],
+            [-6.0, -1.0],
+            [-6.0,  0.0],
+            [-6.0,  1.0],
+            [-6.0,  2.0],
+            [-6.0,  4.0],
+            [-6.0,  5.0],
+            [-6.0,  6.0],
+            [-5.0, -4.0],
+            [-5.0, -3.0],
+            [-5.0, -2.0],
+            [-5.0, -1.0],
+            [-5.0,  0.0],
+            [-5.0,  1.0],
+            [-5.0,  2.0],
+            [-5.0,  4.0],
+            [-5.0,  5.0],
+            [-5.0,  6.0],
+            [-4.0, -6.0],
+            [-4.0, -5.0],
+            [-4.0, -4.0],
+            [-4.0, -1.0],
+            [-4.0,  2.0],
+            [-4.0,  3.0],
+            [-4.0,  5.0],
+            [-4.0,  6.0],
+            [-3.0, -6.0],
+            [-3.0, -5.0],
+            [-3.0, -4.0],
+            [-3.0, -1.0],
+            [-3.0,  0.0],
+            [-3.0,  1.0],
+            [-3.0,  2.0],
+            [-3.0,  3.0],
+            [-3.0,  5.0],
+            [-3.0,  6.0],
+            [-2.0, -6.0],
+            [-2.0, -5.0],
+            [-2.0, -4.0],
+            [-2.0, -3.0],
+            [-2.0, -2.0],
+            [-2.0,  1.0],
+            [-2.0,  2.0],
+            [-2.0,  3.0],
+            [-2.0,  4.0],
+            [-2.0,  5.0],
+            [-1.0, -6.0],
+            [-1.0, -5.0],
+            [-1.0, -2.0],
+            [-1.0, -1.0],
+            [-1.0,  0.0],
+            [-1.0,  1.0],
+            [-1.0,  5.0],
+            [ 0.0, -6.0],
+            [ 0.0, -5.0],
+            [ 0.0, -2.0],
+            [ 0.0, -1.0],
+            [ 0.0,  1.0],
+            [ 0.0,  5.0],
+            [ 0.0,  6.0]
+        ]
         self.reward_param = config.reward_param
         self.action_prev = [0.0, 0.0]
         self.state0 = None
-        self.goal_dist_prev = None
+        self.target_dist_prev = None
         self.port = config.api_port
     
     def launch(self):
@@ -41,12 +169,17 @@ class Turtlebot3_obstacles(Core):
         ]
         self.body_handle = vrep.simxGetObjectHandle(
             self.clientID,
+            'Turtlebot3',
+            vrep.simx_opmode_blocking
+        )[1]
+        self.pose_handle = vrep.simxGetObjectHandle(
+            self.clientID,
             'Turtlebot3_base',
             vrep.simx_opmode_blocking
         )[1]
-        self.goal_handle = vrep.simxGetObjectHandle(
+        self.target_handle = vrep.simxGetObjectHandle(
             self.clientID,
-            'Goal',
+            'Target',
             vrep.simx_opmode_blocking
         )[1]
         self.epoch = 0
@@ -54,17 +187,24 @@ class Turtlebot3_obstacles(Core):
     
     def reset(self):
         self.vrep_reset()
-        self.goal = choice(self.goal_set)
+        self.target = choice(self.target_set)
         vrep.simxSetObjectPosition(
             self.clientID,
-            self.goal_handle,
+            self.target_handle,
             -1,
-            self.goal+[0],
+            self.target+[0],
+            vrep.simx_opmode_blocking
+        )
+        vrep.simxSetObjectOrientation(
+            self.clientID,
+            self.body_handle,
+            -1,
+            [-pi/2, pi*uniform(-0.99, 0.99), -pi/2],
             vrep.simx_opmode_blocking
         )
         self.state0 = None
         self.action_prev = [0.0, 0.0]
-        self.goal_dist_prev = None
+        self.target_dist_prev = None
         self.epoch += self.count
         self.count = 0
         self.reward_sum = 0.0
@@ -72,82 +212,74 @@ class Turtlebot3_obstacles(Core):
     
     def start(self):
         self.vrep_start()
-        t = vrep.simxGetLastCmdTime(self.clientID)
-        vrep.simxSynchronousTrigger(self.clientID)
+        lrf = None
+        while type(lrf)==type(None):
+            vrep.simxSynchronousTrigger(self.clientID)
+            lrf = self.get_measurement()
+        target_pos = vrep.simxGetObjectPosition(
+            self.clientID,
+            self.target_handle,
+            self.pose_handle,
+            vrep.simx_opmode_blocking
+        )[1]
         self.controller([0.0, 0.0])
-        while vrep.simxGetLastCmdTime(self.clientID)-t<self.dt:
-            lrf_bin = vrep.simxGetStringSignal(
-                self.clientID,
-                'measurement',
-                vrep.simx_opmode_streaming
-            )[1]
-            pose = vrep.simxGetObjectPosition(
-                self.clientID,
-                self.body_handle,
-                -1,
-                vrep.simx_opmode_streaming
-            )[1]
+        target_dist = linalg.norm(target_pos[0:2])
+        target_angle = arctan2(-target_pos[0], target_pos[1])
+        state = list(lrf)+[0.0, 0.0, target_dist/3.5, target_angle/pi]
+        return state, 0
     
-    def reward(self, lrf, goal_dist, action):
-        # return 10*(self.goal_dist_prev-goal_dist) \
+    def reward(self, lrf, target_dist, action):
+        # return 10*(self.target_dist_prev-target_dist) \
         #        -(1/min(lrf)-1)/5.0 \
         #        -0.5*(1+self.reward_param*action[1]**2)
-        r_g = 8.0*(self.goal_dist_prev-goal_dist)
+        r_t = 8.0*(self.target_dist_prev-target_dist)
         rho = min(lrf)
-        if (rho-0.01972)<self.reward_param/5.578:
-            r_o = min((1.0/(rho-0.01972)-5.578/self.reward_param)**2, 1)
+        if (rho-0.03142857)<self.reward_param/3.5:
+            r_o = min((1.0/(rho-0.03142857)-3.5/self.reward_param)**2, 1)
         else:
             r_o = 0
-        return r_g-r_o
+        return r_t-r_o-0.01*action[1]**2
 
     def step(self, action, return_obs = False):
         self.count += 1
         self.controller(action)
-        t = vrep.simxGetLastCmdTime(self.clientID)
-        vrep.simxSynchronousTrigger(self.clientID)
-        while vrep.simxGetLastCmdTime(self.clientID)-t < self.dt:
-            pose = vrep.simxGetObjectPosition(
-                self.clientID,
-                self.body_handle,
-                -1,
-                vrep.simx_opmode_blocking
-            )[1]
-            orientation = vrep.simxGetObjectOrientation(
-                self.clientID,
-                self.body_handle,
-                -1,
-                vrep.simx_opmode_blocking
-            )[1][2]
-            goal_pos = vrep.simxGetObjectPosition(
-                self.clientID,
-                self.goal_handle,
-                self.body_handle,
-                vrep.simx_opmode_blocking
-            )[1]
-            lrf_bin = vrep.simxGetStringSignal(
-                self.clientID,
-                'hokuyo_data',
-                vrep.simx_opmode_blocking
-            )[1]
-            lrf = array(vrep.simxUnpackFloats(lrf_bin), dtype=float)/5.578
-        goal_dist = linalg.norm(goal_pos[0:2])
-        goal_angle = arctan2(-goal_pos[0], goal_pos[1])
-        state1 = list(lrf)+[action[0]/0.26, action[1]/0.8]
-        state1 += [goal_dist/5.578, goal_angle/pi] \
-                       if goal_dist<5.578 else \
-                  [1, goal_angle/pi]
-        if self.goal_dist_prev != None:
-            reward = self.reward(lrf, goal_dist, action)
-            self.goal_dist_prev = goal_dist
+        lrf = None
+        while type(lrf)==type(None):
+            vrep.simxSynchronousTrigger(self.clientID)
+            lrf = self.get_measurement()
+        pose = vrep.simxGetObjectPosition(
+            self.clientID,
+            self.pose_handle,
+            -1,
+            vrep.simx_opmode_blocking
+        )[1]
+        orientation = vrep.simxGetObjectOrientation(
+            self.clientID,
+            self.pose_handle,
+            -1,
+            vrep.simx_opmode_blocking
+        )[1][2]
+        target_pos = vrep.simxGetObjectPosition(
+            self.clientID,
+            self.target_handle,
+            self.pose_handle,
+            vrep.simx_opmode_blocking
+        )[1]
+        target_dist = linalg.norm(target_pos[0:2])
+        target_angle = arctan2(-target_pos[0], target_pos[1])
+        state1 = list(lrf)+[action[0]/0.26, action[1]/0.8]+[target_dist/3.5, target_angle/pi]
+        if self.target_dist_prev != None:
+            reward = self.reward(lrf, target_dist, action)
+            self.target_dist_prev = target_dist
             self.reward_sum += reward
         sys.stderr.write(
-            '\rstep:%d| goal:% 2.1f, % 2.1f | pose:% 2.1f, % 2.1f | avg.reward:% 4.2f'
-            %(self.count, self.goal[0], self.goal[1], pose[0], pose[1], self.reward_sum/self.count)
+            '\rstep:%d| target:% 2.1f, % 2.1f | pose:% 2.1f, % 2.1f | avg.reward:% 4.2f'
+            %(self.count, self.target[0], self.target[1], pose[0], pose[1], self.reward_sum/self.count)
         )
-        if min(lrf) < 0.01972:
+        if min(lrf) < 0.03142857:
             done = 1
             print(' | Fail')
-        elif goal_dist < 0.1:
+        elif target_dist < 0.05:
             done = 1
             print(' | Success')
         else:
@@ -164,14 +296,14 @@ class Turtlebot3_obstacles(Core):
             )
         self.state0 = state1
         self.action_prev = action
-        self.goal_dist_prev = goal_dist
+        self.target_dist_prev = target_dist
         if return_obs:
             obs = {
                 'state':state1, 
                 'lidar':list(lrf), 
                 'action':action, 
                 'pose':[pose[0], pose[1], orientation], 
-                'goal':[goal_dist, goal_angle], 
+                'target':[target_dist, target_angle], 
                 'reward':reward, 
                 'time':t+self.dt
             }
@@ -186,11 +318,24 @@ class Turtlebot3_obstacles(Core):
             self.clientID,
             self.joint_handles[0],
             vel_right,
-            vrep.simx_opmode_streaming
+            vrep.simx_opmode_oneshot
         )
         vrep.simxSetJointTargetVelocity(
             self.clientID,
             self.joint_handles[1],
             vel_left,
-            vrep.simx_opmode_streaming
+            vrep.simx_opmode_oneshot
         )
+
+    def get_measurement(self):
+        lrf_bin = vrep.simxGetStringSignal(
+            self.clientID,
+            'measurement',
+            vrep.simx_opmode_blocking
+        )[1]
+        try:
+            lrf = array(vrep.simxUnpackFloats(lrf_bin), dtype=float)/3.5
+            lrf = npmax(reshape(lrf, [-1,10]), 1)
+        except:
+            lrf = None
+        return lrf
