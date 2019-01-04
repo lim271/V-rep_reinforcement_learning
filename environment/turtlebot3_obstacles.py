@@ -224,7 +224,7 @@ class Turtlebot3_obstacles(Core):
         )[1]
         self.controller([0.0, 0.0])
         target_dist = linalg.norm(target_pos[0:2])
-        target_angle = arctan2(-target_pos[0], target_pos[1])
+        target_angle = arctan2(target_pos[1], target_pos[0])
         state = list(lrf)+[0.0, 0.0, target_dist/3.5, target_angle/pi]
         return state, 0
     
@@ -266,7 +266,7 @@ class Turtlebot3_obstacles(Core):
             vrep.simx_opmode_blocking
         )[1]
         target_dist = linalg.norm(target_pos[0:2])
-        target_angle = arctan2(-target_pos[0], target_pos[1])
+        target_angle = arctan2(target_pos[1], target_pos[0])
         state1 = list(lrf)+[action[0]/0.26, action[1]/0.8]+[target_dist/3.5, target_angle/pi]
         if self.target_dist_prev != None:
             reward = self.reward(lrf, target_dist, action)
