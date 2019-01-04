@@ -20,9 +20,10 @@ def train(port):
     agent = DDPG(config)
     # agent.load(load('savedir/weight_0.0.npy').item())
 
-    # params = [0.1303,  0.2576,  0.4564]
+    params = [0.1303, 0.0973, 0.2559]
+    # params = [0.2576, 0.1315, 0.3058]
+    # params = [0.4564, 0.1305, 0.4629]
     # params = [0.0973, 0.1315, 0.1305, 0.2559, 0.3058, 0.4629]
-    params = [0.4564]
     env.launch()
 
     for param in params:
@@ -34,7 +35,7 @@ def train(port):
             print('Rho:', param, '\tEpisode:', episode+1)
             state, done = env.start()
             for step in range(config.max_step):
-                epsilon = 0.3*(0.99998**env.epoch)
+                epsilon = 0.3*(0.99999**env.epoch)
                 action = agent.policy(reshape(state, [1, config.state_dim]), epsilon=epsilon)
                 state, done = env.step(reshape(action, [config.action_dim]))
                 if env.replay.buffersize > 256:
