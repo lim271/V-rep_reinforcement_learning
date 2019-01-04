@@ -85,5 +85,5 @@ def test(port):
         save('recovered_traj2.npy', trajs)
 
 if __name__ == '__main__':
-	train(19999)
-    # test(20000)
+    train(19997)
+    #test(20000)
