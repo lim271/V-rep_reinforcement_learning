@@ -75,9 +75,9 @@ class DDPG(object):
         self.a_scale, self.a_mean = self.sess.run(
             [self.actor_net.a_scale, self.actor_net.a_mean])
 
-    def policy(self, state, epsilon=1.0):
+    def policy(self, state, epsilon=0.0):
         action = self.sess.run(self.actor_net.out_, feed_dict={self.actor_net.state:state})
-        action = epsilon*(self.a_scale*tanh(0.5*random.uniform(-1, 1, 2))+self.a_mean)+(1-epsilon)*action
+        action = epsilon*(self.a_scale*random.uniform(-1, 1, 2)+self.a_mean)+(1-epsilon)*action
         return action
     
     def reset(self):
