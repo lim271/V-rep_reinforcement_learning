@@ -3,7 +3,7 @@
 
 ## Dependencies
 
-V-rep simulator:
+V-rep simulator:\n
 http://www.coppeliarobotics.com/downloads.html
 Change self.vrep_path at configuration.py:23 to your V-rep path
 
