@@ -8,7 +8,7 @@ python run_turtlebot.py
 
 ## Turtlebot3
 ```bash
-python run_turtlebot.py
+python run_turtlebot3.py
 ```
 
 ## Jaco2 manipulator from Kinova robotics
