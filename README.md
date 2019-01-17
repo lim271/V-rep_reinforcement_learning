@@ -3,15 +3,15 @@
 
 ## Dependencies
 
-V-rep simulator:\n
-http://www.coppeliarobotics.com/downloads.html
-Change self.vrep_path at configuration.py:23 to your V-rep path
-
-Tensorflow:
-https://www.tensorflow.org
-
-numpy:
-http://www.numpy.org
+V-rep simulator:  
+http://www.coppeliarobotics.com/downloads.html  
+Change self.vrep_path at configuration.py:23 to your V-rep path.  
+  
+Tensorflow:  
+https://www.tensorflow.org  
+  
+numpy:  
+http://www.numpy.org  
 
 ## Run
 
