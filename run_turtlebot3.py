@@ -22,7 +22,7 @@ def train(port):
     env.reward_param = param
     for episode in range(config.max_episode):
         env.reset()
-        print('Rho:', param, '\tEpisode:', episode+1)
+        print('Episode:', episode+1)
         state, done = env.start()
         for step in range(config.max_step):
             epsilon = 0.3*(0.99999**env.epoch)
