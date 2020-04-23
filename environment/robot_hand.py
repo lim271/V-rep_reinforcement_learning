@@ -4,8 +4,8 @@ import sys
 import time
 from numpy import array,reshape,linalg,arctan2,pi,expand_dims
 from random import choice
-from env_modules import vrep
-from env_modules.core import Core
+from environment.env_modules import vrep
+from environment.env_modules.core import Core
 
 
 scene_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'scenes')

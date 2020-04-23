@@ -5,8 +5,8 @@ import subprocess
 import time
 import numpy as np
 
-import vrep
-from replay import Replay
+from environment.env_modules import vrep
+from environment.env_modules.replay import Replay
 
 class Core(object):
 

@@ -1,8 +1,8 @@
 import tensorflow as tf
 from numpy import reshape, tanh, random
-from agent_modules.build_actor_critic import Build_network
-from agent_modules.additional_functions import l2_regularizer, gradient_inverter
-from agent_modules.ou_noise import OUNoise
+from agent.agent_modules.build_actor_critic import Build_network
+from agent.agent_modules.additional_functions import l2_regularizer, gradient_inverter
+from agent.agent_modules.ou_noise import OUNoise
 
 
 class DDPG(object):
@@ -103,13 +103,18 @@ class DDPG(object):
                                  self.actor_net.state:batch['state0']})
         self.sess.run(self.assign_target_soft)
     
-    def load(self, saved_variables):
-        self.sess.run( \
-            [self.actor_net.variables[var].assign(saved_variables[var]) \
-                for var in self.actor_net.variables.keys()]+ \
-            [self.critic_net.variables[var].assign(saved_variables[var]) \
-                for var in self.critic_net.variables.keys()]+ \
-            self.assign_target)
+    def load(self, saved_variables, test=True):
+        if test:
+            self.sess.run( \
+                [self.actor_net.variables[var].assign(saved_variables[var]) \
+                    for var in self.actor_net.variables.keys()])
+        else:
+            self.sess.run( \
+                [self.actor_net.variables[var].assign(saved_variables[var]) \
+                    for var in self.actor_net.variables.keys()]+ \
+                [self.critic_net.variables[var].assign(saved_variables[var]) \
+                    for var in self.critic_net.variables.keys()]+ \
+                self.assign_target)
     
     def return_variables(self):
         return dict({name:self.sess.run(name) \

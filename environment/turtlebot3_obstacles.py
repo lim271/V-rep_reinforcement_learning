@@ -4,9 +4,9 @@ import sys
 import time
 from numpy import array, reshape, linalg, arctan2, pi, expand_dims
 from numpy import max as npmax
-from random import choice, uniform
-from env_modules import vrep
-from env_modules.core import Core
+from random import choice, uniform, random
+from environment.env_modules import vrep
+from environment.env_modules.core import Core
 
 
 scene_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scenes')
@@ -59,7 +59,7 @@ class Turtlebot3_obstacles(Core):
             [ 3.0, -2.0],
             [ 3.0, -1.0],
             [ 3.0,  0.0],
-            [ 3.0,  1.0],
+            # [ 3.0,  1.0],
             [ 3.0,  3.0],
             [ 3.0,  5.0],
             [ 3.0,  6.0],
@@ -74,7 +74,7 @@ class Turtlebot3_obstacles(Core):
             [ 2.0,  4.0],
             [ 2.0,  5.0],
             [ 2.0,  6.0],
-            [ 1.0, -6.0],
+            # [ 1.0, -6.0],
             [ 1.0, -5.0],
             [ 1.0, -2.0],
             [ 1.0, -1.0],
@@ -85,7 +85,7 @@ class Turtlebot3_obstacles(Core):
             [-6.0, -4.0],
             [-6.0, -3.0],
             [-6.0, -2.0],
-            [-6.0, -1.0],
+            # [-6.0, -1.0],
             [-6.0,  0.0],
             [-6.0,  1.0],
             [-6.0,  2.0],
@@ -130,14 +130,14 @@ class Turtlebot3_obstacles(Core):
             [-2.0,  3.0],
             [-2.0,  4.0],
             [-2.0,  5.0],
-            [-1.0, -6.0],
+            # [-1.0, -6.0],
             [-1.0, -5.0],
             [-1.0, -2.0],
             [-1.0, -1.0],
             [-1.0,  0.0],
             [-1.0,  1.0],
             [-1.0,  5.0],
-            [ 0.0, -6.0],
+            # [ 0.0, -6.0],
             [ 0.0, -5.0],
             [ 0.0, -2.0],
             [ 0.0, -1.0],
@@ -186,7 +186,7 @@ class Turtlebot3_obstacles(Core):
             self.clientID,
             self.target_handle,
             -1,
-            self.target+[0],
+            [self.target[0]+random()*0.2-0.1, self.target[1]+random()*0.2-0.1]+[0],
             vrep.simx_opmode_blocking
         )
         vrep.simxSetObjectOrientation(
@@ -235,6 +235,7 @@ class Turtlebot3_obstacles(Core):
         return r_t-r_o-0.01*action[1]**2
 
     def step(self, action, return_obs = False):
+        success = False
         self.count += 1
         self.controller(action)
         lrf = None
@@ -272,9 +273,11 @@ class Turtlebot3_obstacles(Core):
         )
         if min(lrf) < 0.03142857:
             done = 1
+            success = False
             print(' | Fail')
-        elif target_dist < 0.05:
+        elif target_dist < 0.2:
             done = 1
+            success = True
             print(' | Success')
         else:
             done = 0
@@ -298,8 +301,8 @@ class Turtlebot3_obstacles(Core):
                 'action':action, 
                 'pose':[pose[0], pose[1], orientation], 
                 'target':[target_dist, target_angle], 
-                'reward':reward, 
-                'time':t+self.dt
+                'reward':reward,
+                'success':success
             }
             return state1, obs, done
         else:
